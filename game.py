@@ -10,7 +10,7 @@ class Game:
         self.screen = pygame.display.set_mode(screen_size)
         self.all_sprite_group = pygame.sprite.Group()
 
-        self.player = Player(0, 0)
+        self.player = Player(screen_size)
         self.all_sprite_group.add(self.player)
     
     def draw(self):
