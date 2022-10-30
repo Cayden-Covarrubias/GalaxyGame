@@ -8,18 +8,19 @@ class Game:
 
     def __init__(self, screen_size, keyboard_input=False):
         self.screen = pygame.display.set_mode(screen_size)
-        self.all_sprite_group = pygame.sprite.Group()
+        self.player_group = pygame.sprite.Group()
 
-        self.player = Player(screen_size)
-        self.all_sprite_group.add(self.player)
+        self.player = Player(screen_size, self.player_group)
+        self.player_group.add(self.player)
     
     def draw(self):
         self.screen.fill(BACKGROUND_COLOR)
-        self.all_sprite_group.draw(self.screen)
+        self.player_group.draw(self.screen)
         pygame.display.flip()
 
     def handle_keypress(self, key, press_type):
-        pass
+        if (key == pygame.K_SPACE and press_type == pygame.KEYDOWN):
+            self.player.fire()
 
     def run(self):
 
@@ -33,7 +34,7 @@ class Game:
                 elif event.type in [pygame.KEYDOWN, pygame.KEYUP]:
                     self.handle_keypress(event.key, event.type)
 
-            self.all_sprite_group.update()
+            self.player_group.update()
             self.draw()
 
 def main():
