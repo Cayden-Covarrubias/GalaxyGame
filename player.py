@@ -1,53 +1,37 @@
 import pygame
 
+from entity import Entity, DEFAULT_SIZE
 from player_missile import PlayerMissile
 
-PLAYER_SPEED = 0.18
-PLAYER_SIZE = 24
+PLAYER_SPEED = 0.22
 PLAYER_PADDING = 24
 
 PLAYER_STARTING_HEALTH = 100
 
 PLAYER_TEXTURE = pygame.image.load('textures/player_ship.png')
 
-class Player(pygame.sprite.Sprite):
+class Player(Entity):
 
-    def __init__(self, screen_size, missile_group : pygame.sprite.Group):
-        pygame.sprite.Sprite.__init__(self)
+    def __init__(self, world, screen_size):
+        super().__init__(world, screen_size[0] / 2, screen_size[1] - DEFAULT_SIZE / 2 - PLAYER_PADDING, PLAYER_STARTING_HEALTH, PLAYER_TEXTURE)
 
-        self.image = pygame.transform.scale(PLAYER_TEXTURE, (PLAYER_SIZE, PLAYER_SIZE))
-        self.image.set_colorkey((0, 0, 0))
-
-        self.rect = self.image.get_rect()
-
-        self.x = screen_size[0] / 2
-        self.y = screen_size[1] - PLAYER_SIZE / 2 - PLAYER_PADDING
-
-        self._min_x = PLAYER_SIZE / 2 + PLAYER_PADDING
-        self._max_x = screen_size[0] - PLAYER_SIZE / 2 - PLAYER_PADDING
-
-        self.rect.x = self.x
-        self.rect.y = self.y
-
-        self.health = PLAYER_STARTING_HEALTH
-        self.missile_group = missile_group
+        self._min_x = DEFAULT_SIZE / 2 + PLAYER_PADDING
+        self._max_x = screen_size[0] - DEFAULT_SIZE / 2 - PLAYER_PADDING
     
     def fire(self):
-        missile = PlayerMissile(self.x, self.y)
-        self.missile_group.add(missile)
+        missile = PlayerMissile(self.world, self.x, self.y)
+        self.world.ally_group.add(missile)
 
     def update(self):
         pressed = pygame.key.get_pressed()
 
         if pressed[pygame.K_LEFT]:
-            self.x -= PLAYER_SPEED
+            self.x -= PLAYER_SPEED * self.world.delta_time
 
         if pressed[pygame.K_RIGHT]:
-            self.x += PLAYER_SPEED
+            self.x += PLAYER_SPEED * self.world.delta_time
 
         self.x = min(self.x, self._max_x)
         self.x = max(self.x, self._min_x)
         
-        self.rect.x = self.x - self.rect.width / 2
-        self.rect.y = self.y - self.rect.height / 2
-        pygame.sprite.Sprite.update(self)
+        super().update()

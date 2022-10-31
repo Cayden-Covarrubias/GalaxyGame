@@ -1,44 +1,70 @@
 import pygame
+import time
 
 from player import Player
+from enemy import Enemy
+from world import World
 
 BACKGROUND_COLOR = (0, 0, 0)
 
 class Game:
 
-    def __init__(self, screen_size, keyboard_input=False):
-        self.screen = pygame.display.set_mode(screen_size)
-        self.player_group = pygame.sprite.Group()
+    def __init__(self, screen_size, keyboard_input=False, fullscreen=False):
 
-        self.player = Player(screen_size, self.player_group)
-        self.player_group.add(self.player)
+        pygame.init()
+
+        if (fullscreen):
+            screen_size = pygame.display.get_desktop_sizes()[0]
+
+        self.screen = pygame.display.set_mode(screen_size)
+
+        if (fullscreen):
+            pygame.display.toggle_fullscreen()
+        
+        self.world = World()
+
+        self.player = Player(self.world, screen_size)
+        self.world.ally_group.add(self.player)
+
+        self.running = False
+
+        for i in range(screen_size[0] // 100):
+            test_enemy = Enemy(self.world, 50 + i * 100, 50)
+            self.world.enemy_group.add(test_enemy)
     
     def draw(self):
         self.screen.fill(BACKGROUND_COLOR)
-        self.player_group.draw(self.screen)
+        self.world.draw(self.screen)
+
         pygame.display.flip()
 
     def handle_keypress(self, key, press_type):
-        if (key == pygame.K_SPACE and press_type == pygame.KEYDOWN):
+        if (key == pygame.K_ESCAPE and press_type == pygame.KEYDOWN):
+            self.running = False
+
+        elif (key == pygame.K_SPACE and press_type == pygame.KEYDOWN):
             self.player.fire()
+        
 
     def run(self):
+        self.running = True
 
-        done = False
-        while not done:
+        timer_0 = time.time()
+        timer_1 = timer_0
+        while self.running:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    done = True
+                    self.running = False
 
                 elif event.type in [pygame.KEYDOWN, pygame.KEYUP]:
                     self.handle_keypress(event.key, event.type)
 
-            self.player_group.update()
+            self.world.update()
             self.draw()
 
 def main():
-    game = Game((800, 600))
+    game = Game((600, 800), fullscreen=False)
     game.run()
 
 if __name__ == "__main__":
