@@ -1,12 +1,15 @@
 import pygame
 
+from formation import Formation
+
 class World:
-    def __init__(self, target_fps=70):
+    def __init__(self, size, target_fps=70):
         self.ally_group = pygame.sprite.Group()
-        self.enemy_group = pygame.sprite.Group()
         self.clock = pygame.time.Clock()
         self.delta_time = 0
         self.target_fps = target_fps
+        self.size = size
+        self.enemy_group = Formation(self, 2)
     
     def draw(self, surface):
         self.ally_group.draw(surface)

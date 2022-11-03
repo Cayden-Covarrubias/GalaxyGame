@@ -35,3 +35,6 @@ class Player(Entity):
         self.x = max(self.x, self._min_x)
         
         super().update()
+    
+    def kill(self):
+        print("GAME OVER!")

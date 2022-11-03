@@ -10,7 +10,6 @@ BACKGROUND_COLOR = (0, 0, 0)
 class Game:
 
     def __init__(self, screen_size, keyboard_input=False, fullscreen=False):
-
         pygame.init()
 
         if (fullscreen):
@@ -21,21 +20,16 @@ class Game:
         if (fullscreen):
             pygame.display.toggle_fullscreen()
         
-        self.world = World()
+        self.world = World(screen_size)
 
         self.player = Player(self.world, screen_size)
         self.world.ally_group.add(self.player)
 
         self.running = False
-
-        for i in range(screen_size[0] // 100):
-            test_enemy = Enemy(self.world, 50 + i * 100, 50)
-            self.world.enemy_group.add(test_enemy)
     
     def draw(self):
         self.screen.fill(BACKGROUND_COLOR)
         self.world.draw(self.screen)
-
         pygame.display.flip()
 
     def handle_keypress(self, key, press_type):
@@ -44,6 +38,9 @@ class Game:
 
         elif (key == pygame.K_SPACE and press_type == pygame.KEYDOWN):
             self.player.fire()
+        
+        elif (key == pygame.K_RETURN and press_type == pygame.KEYDOWN):
+            list(self.world.enemy_group)[0].fire()
         
 
     def run(self):
@@ -64,7 +61,7 @@ class Game:
             self.draw()
 
 def main():
-    game = Game((600, 800), fullscreen=False)
+    game = Game((800, 600), fullscreen=False)
     game.run()
 
 if __name__ == "__main__":

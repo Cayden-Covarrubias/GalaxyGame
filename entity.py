@@ -1,6 +1,7 @@
 import pygame
 
 DEFAULT_SIZE = 40
+WIDTH_CORRECTION = 31 / 32
 
 class Entity(pygame.sprite.Sprite):
 
@@ -14,6 +15,8 @@ class Entity(pygame.sprite.Sprite):
 
         self.x = x
         self.y = y
+
+        self.rect.width *= WIDTH_CORRECTION
 
         self.health = health
         self.world = world
