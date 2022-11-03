@@ -9,7 +9,7 @@ class World:
         self.delta_time = 0
         self.target_fps = target_fps
         self.size = size
-        self.enemy_group = Formation(self, 2)
+        self.enemy_group = Formation(self, 3)
     
     def draw(self, surface):
         self.ally_group.draw(surface)
