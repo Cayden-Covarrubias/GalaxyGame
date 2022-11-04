@@ -1,5 +1,7 @@
 import pygame
 
+from game_math import *
+
 from entity import Entity
 from enemy_missile import EnemyMissile
 
@@ -9,13 +11,13 @@ ENEMY_TEXTURE = pygame.image.load('textures/alien_blue.png')
 
 class Enemy(Entity):
 
-    def __init__(self, world, x, y):
-        super().__init__(world, x, y, ENEMY_STARTING_HEALTH, ENEMY_TEXTURE)
+    def __init__(self, world, position : Vector):
+        super().__init__(world, position, ENEMY_STARTING_HEALTH, ENEMY_TEXTURE)
 
     def fire(self):
-        missile = EnemyMissile(self.world, self.x, self.y)
-        self.world.enemy_group.add(missile)
+        if self.alive():
+            missile = EnemyMissile(self.world, self.position)
+            self.world.enemy_group.add(missile)
 
     def update(self):
-
         super().update()

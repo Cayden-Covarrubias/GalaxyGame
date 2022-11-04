@@ -10,11 +10,11 @@ ENEMY_MISSILE_TEXTURE = pygame.image.load('textures/enemy_missile.png')
 
 class EnemyMissile(Entity):
 
-    def __init__(self, world, x, y):
-        super().__init__(world, x, y, ENEMY_MISSILE_HEALTH, ENEMY_MISSILE_TEXTURE)
+    def __init__(self, world, position):
+        super().__init__(world, position, ENEMY_MISSILE_HEALTH, ENEMY_MISSILE_TEXTURE)
 
     def update(self):
-        self.y += ENEMY_MISSILE_SPEED * self.world.delta_time
+        self.position.y += ENEMY_MISSILE_SPEED * self.world.delta_time
 
         collisions = pygame.sprite.spritecollide(self, self.world.ally_group, False, pygame.sprite.collide_mask)
         if (len(collisions) > 0):
@@ -22,7 +22,7 @@ class EnemyMissile(Entity):
                 other.health -= ENEMY_MISSILE_DAMAGE
             self.kill()
 
-        if (self.y > self.world.size[1]):
+        if (self.position.y > self.world.size[1]):
             self.kill()
 
         super().update()

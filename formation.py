@@ -1,6 +1,7 @@
 import pygame
 import random
 
+from game_math import *
 from enemy import Enemy
 from entity import DEFAULT_SIZE
 
@@ -33,7 +34,7 @@ class Formation(pygame.sprite.Group):
                 x = self.center_x + self._spacing * (j - self._size // 2)
                 y = self.center_y + self._spacing * (i - self._size // 2)
 
-                enemy = Enemy(world, x, y)
+                enemy = Enemy(world, Vector(x, y))
 
                 self.ships[i].append(enemy)
                 self.add(enemy)
@@ -51,8 +52,8 @@ class Formation(pygame.sprite.Group):
                 x = self.center_x + self._spacing * (j - self._size // 2)
                 y = self.center_y + self._spacing * (i - self._size // 2)
 
-                self.ships[i][j].x = x
-                self.ships[i][j].y = y
+                self.ships[i][j].position.x = x
+                self.ships[i][j].position.y = y
 
     def update(self):
         self.center_x += self._move_x * self.world.delta_time
