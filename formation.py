@@ -1,12 +1,14 @@
 import pygame
-import mediapipe
+import random
 
 from enemy import Enemy
 from entity import DEFAULT_SIZE
 
-MOVE_DISTANCE = 2
-MOVE_TIME = 1
+MOVE_SPEED = 0.07
 MOVE_PADDING = 20
+
+ADVANCE_MIN = 100
+ADVANCE_MAX = 1500
 
 class Formation(pygame.sprite.Group):
 
@@ -15,6 +17,7 @@ class Formation(pygame.sprite.Group):
 
         self._size = 2 * size - 1
         self._spacing = spacing + DEFAULT_SIZE
+        self.world = world
 
         self.ships = []
 
@@ -35,14 +38,12 @@ class Formation(pygame.sprite.Group):
                 self.ships[i].append(enemy)
                 self.add(enemy)
 
-        self._move_x = MOVE_DISTANCE
-        self._move_y = 0
-        self._move_timer = pygame.time.get_ticks() + 500
+        self._move_x = MOVE_SPEED
 
         self._min_x = self._width / 2 + MOVE_PADDING
         self._max_x = world.size[0] - self._width / 2 - MOVE_PADDING
-        self._min_y = self._height / 2 + MOVE_PADDING
-        self._max_y = world.size[1] / 2 - self._height / 2 - MOVE_PADDING
+
+        self._advance_timer = pygame.time.get_ticks() + random.randint(ADVANCE_MIN, ADVANCE_MAX)
     
     def _update_ship_pos(self):
         for i in range(self._size):
@@ -54,29 +55,24 @@ class Formation(pygame.sprite.Group):
                 self.ships[i][j].y = y
 
     def update(self):
-        if (self._move_timer <= pygame.time.get_ticks()):
-            self.center_x += self._move_x
-            self.center_y += self._move_y
+        self.center_x += self._move_x * self.world.delta_time
 
-            self._update_ship_pos()
+        self._update_ship_pos()
 
-            if (self._move_x > 0 and self.center_x > self._max_x):
-                self._move_x = 0
-                self._move_y = -MOVE_DISTANCE
+        if (self._move_x > 0 and self.center_x > self._max_x - random.randint(0, 100)):
+            self._move_x = 0
+            self._move_x = -MOVE_SPEED
 
-            elif (self._move_x < 0 and self.center_x < self._min_x):
-                self._move_x = 0
-                self._move_y = MOVE_DISTANCE
+        elif (self._move_x < 0 and self.center_x < self._min_x + random.randint(0, 100)):
+            self._move_x = 0
+            self._move_x = MOVE_SPEED
+        
+        if (self._advance_timer < pygame.time.get_ticks()):
+            self._advance_timer = pygame.time.get_ticks() + random.randint(ADVANCE_MIN, ADVANCE_MAX)
+            random.choice(random.choice(self.ships)).fire()
+            
 
-            elif (self._move_y < 0 and self.center_y < self._min_y):
-                self._move_x = -MOVE_DISTANCE
-                self._move_y = 0
 
-            elif (self._move_y > 0 and self.center_y > self._max_y):
-                self._move_x = MOVE_DISTANCE
-                self._move_y = 0
-
-            self._move_timer += MOVE_TIME
 
         pygame.sprite.Group.update(self)
     

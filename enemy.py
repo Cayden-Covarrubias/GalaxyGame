@@ -15,6 +15,7 @@ class Enemy(Entity):
     def fire(self):
         missile = EnemyMissile(self.world, self.x, self.y)
         self.world.enemy_group.add(missile)
-    
+
     def update(self):
+
         super().update()

@@ -20,6 +20,8 @@ class Entity(pygame.sprite.Sprite):
 
         self.health = health
         self.world = world
+
+        self.rect.center = (self.x, self.y)
     
     def update(self):
         if self.health <= 0:

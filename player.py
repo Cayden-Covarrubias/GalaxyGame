@@ -38,3 +38,5 @@ class Player(Entity):
     
     def kill(self):
         print("GAME OVER!")
+        super().kill()
+        pygame.event.post(pygame.event.Event(pygame.QUIT))

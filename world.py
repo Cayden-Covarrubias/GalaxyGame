@@ -20,4 +20,7 @@ class World:
         self.enemy_group.update()
         self.clock.tick(self.target_fps)
         self.delta_time = self.clock.get_time()
+    
+    def get_target_pos(self):
+        return self.ally_group.sprites()[0].rect.center
 
