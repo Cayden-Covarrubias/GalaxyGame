@@ -1,9 +1,6 @@
 import pygame
 
-from game_math import *
-
-from entity import Entity
-from enemy_missile import EnemyMissile
+from gameLib import *
 
 ENEMY_STARTING_HEALTH = 10
 

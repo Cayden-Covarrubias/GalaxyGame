@@ -1,5 +1,7 @@
 import math
 
+from gameLib import *
+
 class Vector:
 
     def __init__(self, x, y):

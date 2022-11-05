@@ -1,9 +1,7 @@
 import pygame
 import random
 
-from game_math import *
-from enemy import Enemy
-from entity import DEFAULT_SIZE
+from gameLib import *
 
 MOVE_SPEED = 0.07
 MOVE_PADDING = 20

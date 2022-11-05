@@ -1,6 +1,6 @@
 import pygame
 
-from formation import Formation
+from gameLib import *
 
 class World:
     def __init__(self, size, target_fps=70):

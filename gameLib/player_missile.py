@@ -1,6 +1,6 @@
 import pygame
 
-from entity import Entity
+from gameLib import *
 
 PLAYER_MISSILE_SPEED = 0.5
 PLAYER_MISSILE_DAMAGE = 10

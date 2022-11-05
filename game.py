@@ -1,12 +1,11 @@
 import pygame
 import time
 
-from game_math import *
-from player import Player
-from enemy import Enemy
-from world import World
+from gameLib import *
 
 BACKGROUND_COLOR = (0, 0, 0)
+
+Entity
 
 class Game:
 

@@ -1,8 +1,6 @@
 import pygame
 
-from game_math import *
-from entity import Entity, DEFAULT_SIZE
-from player_missile import PlayerMissile
+from gameLib import *
 
 PLAYER_SPEED = 0.22
 PLAYER_PADDING = 24

@@ -1,6 +1,6 @@
 import pygame
 
-from game_math import *
+from gameLib import *
 
 DEFAULT_SIZE = 40
 WIDTH_CORRECTION = 31 / 32
