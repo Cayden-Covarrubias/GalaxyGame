@@ -5,8 +5,6 @@ from gameLib import *
 
 BACKGROUND_COLOR = (0, 0, 0)
 
-Entity
-
 class Game:
 
     def __init__(self, screen_size, keyboard_input=False, fullscreen=False):
