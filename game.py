@@ -2,6 +2,7 @@ import pygame
 import time
 
 from gameLib import *
+from track import HandInput
 
 BACKGROUND_COLOR = (0, 0, 0)
 
@@ -24,6 +25,9 @@ class Game:
         self.world.ally_group.add(self.player)
 
         self.running = False
+        self.use_keyboard = keyboard_input
+
+        self.input = HandInput()
     
     def draw(self):
         self.screen.fill(BACKGROUND_COLOR)
@@ -31,6 +35,7 @@ class Game:
         pygame.display.flip()
 
     def handle_keypress(self, key, press_type):
+        
         if (key == pygame.K_ESCAPE and press_type == pygame.KEYDOWN):
             self.running = False
 
@@ -40,7 +45,6 @@ class Game:
         elif (key == pygame.K_RETURN and press_type == pygame.KEYDOWN):
             list(self.world.enemy_group)[0].fire()
         
-
     def run(self):
         self.running = True
 
@@ -54,6 +58,16 @@ class Game:
 
                 elif event.type in [pygame.KEYDOWN, pygame.KEYUP]:
                     self.handle_keypress(event.key, event.type)
+
+            process = self.input.process()
+            if process is not None:
+                fire, move = process
+
+                self.player.position.x = (1 - move) * self.world.size[0]
+
+                if (fire):
+                    self.player.fire()
+
 
             self.world.update()
             self.draw()
