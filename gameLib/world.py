@@ -10,6 +10,7 @@ class World:
         self.target_fps = target_fps
         self.size = size
         self.enemy_group = Formation(self, 3)
+        self.score = 0
     
     def draw(self, surface):
         self.ally_group.draw(surface)

@@ -73,7 +73,7 @@ class Game:
             self.draw()
 
 def main():
-    game = Game((800, 600), fullscreen=False)
+    game = Game((800, 600), fullscreen=True)
     game.run()
 
 if __name__ == "__main__":

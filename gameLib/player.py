@@ -37,5 +37,6 @@ class Player(Entity):
     
     def kill(self):
         print("GAME OVER!")
+        print(f'Final Score: {self.world.score}')
         super().kill()
         pygame.event.post(pygame.event.Event(pygame.QUIT))

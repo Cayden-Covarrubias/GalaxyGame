@@ -18,3 +18,7 @@ class Enemy(Entity):
 
     def update(self):
         super().update()
+    
+    def kill(self):
+        self.world.score += 1
+        super().kill()
