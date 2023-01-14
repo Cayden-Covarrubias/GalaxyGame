@@ -8,7 +8,7 @@ BACKGROUND_COLOR = (0, 0, 0)
 
 class Game:
 
-    def __init__(self, screen_size, keyboard_input=False, fullscreen=False):
+    def __init__(self, screen_size, camera_input=True, fullscreen=False):
         pygame.init()
 
         if (fullscreen):
@@ -25,17 +25,24 @@ class Game:
         self.world.ally_group.add(self.player)
 
         self.running = False
-        self.use_keyboard = keyboard_input
 
-        self.input = HandInput()
+        self.input = None
+        if (camera_input):
+            self.input = HandInput()
+
+        self.font = pygame.font.Font('8bitOperatorPlus-Regular.ttf', 30)
     
     def draw(self):
         self.screen.fill(BACKGROUND_COLOR)
         self.world.draw(self.screen)
+
+        img = self.font.render(f"Score: {self.world.score}", True, (255, 255, 255))
+
+        self.screen.blit(img, (0, 0))
+
         pygame.display.flip()
 
     def handle_keypress(self, key, press_type):
-        
         if (key == pygame.K_ESCAPE and press_type == pygame.KEYDOWN):
             self.running = False
 
@@ -59,21 +66,23 @@ class Game:
                 elif event.type in [pygame.KEYDOWN, pygame.KEYUP]:
                     self.handle_keypress(event.key, event.type)
 
-            process = self.input.process()
+            process = None
+            if (self.input is not None):
+                process = self.input.process()
+
             if process is not None:
                 fire, move = process
 
-                self.player.position.x = (1 - move) * self.world.size[0]
+                self.player.position = self.player.position.lerp(Vector((1 - move) * self.world.size[0], self.player.position.y), 0.6)
 
                 if (fire):
                     self.player.fire()
-
 
             self.world.update()
             self.draw()
 
 def main():
-    game = Game((800, 600), fullscreen=True)
+    game = Game((800, 600), camera_input=False, fullscreen=True)
     game.run()
 
 if __name__ == "__main__":

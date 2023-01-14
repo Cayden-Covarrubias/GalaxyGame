@@ -57,6 +57,11 @@ class HandInput:
         hand_a = results[0]
         hand_b = results[1]
 
+        # mp_drawing.draw_landmarks(image, hand_a, mp_hands.HAND_CONNECTIONS)
+        # mp_drawing.draw_landmarks(image, hand_b, mp_hands.HAND_CONNECTIONS)
+
+        # cv2.imshow("display", cv2.flip(image, 1))
+
         fire_hand = hand_a
         move_hand = hand_b
         if (hand_a.landmark[0].y > hand_b.landmark[0].y):
@@ -155,4 +160,4 @@ def main_test():
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    main()
+    main_test()
