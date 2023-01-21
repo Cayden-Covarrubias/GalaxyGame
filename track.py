@@ -3,6 +3,7 @@ import mediapipe as mp
 import pygame
 import numpy as np
 import math
+import time
 
 def format_data(array, ratio=1):
     center_x = 0
@@ -46,7 +47,7 @@ class HandInput:
         self.falling_edge = False
         self._fire = False
     
-    def process(self):
+    def process_game_input(self):
         _, image = self._cap.read()
         image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         results = self._hand_processor.process(image_rgb).multi_hand_landmarks
@@ -112,7 +113,10 @@ def main_test():
     while not done:
         _, image = cap.read()
         image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        
+        timer = time.time()
         results = hands.process(image_rgb)
+        print(time.time() - timer)
 
         screen.fill((0, 0, 0))
 
@@ -139,7 +143,7 @@ def main_test():
 
             array = format_data(array)
 
-            print(math.hypot(array[4,0] - array[8,0], array[4, 1] - array[8, 1]) < 0.2)
+            # print(math.hypot(array[4,0] - array[8,0], array[4, 1] - array[8, 1]) < 0.2)
 
             for i in range(array.shape[0]):
                 pygame.draw.circle(screen, (0, 255, 0), (int(array[i, 0] * 100) + 250, int(array[i, 1] * 100) + 250), 4) 
