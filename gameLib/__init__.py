@@ -8,3 +8,4 @@ from .player_missile import *
 from .player import *
 from .world import *
 from .menu import *
+from .background import *

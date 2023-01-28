@@ -39,13 +39,16 @@ class Game:
         self.world = None
         self.player = None
 
-        self.menu = Menu(screen_size, self.font)
-
         with open(HIGHSCORE_PATH, 'r') as f:
             self._hs = int(f.read())
 
+        self.menu = Menu(screen_size, self.font, self._hs)
+
+        self.background = Background(screen_size)
+
     def draw(self):
         self.screen.fill(BACKGROUND_COLOR)
+        self.background.draw(self.screen)
 
         if self.state == GameState.PLAYING_GAME:
             self.world.draw(self.screen)
@@ -59,7 +62,6 @@ class Game:
 
             if self.poll_process():
                 self.start_game()
-
 
         pygame.display.flip()
 
@@ -120,7 +122,7 @@ class Game:
         return process
 
 def main():
-    game = Game((800, 600), camera_input=True, fullscreen=True)
+    game = Game((800, 600), camera_input=False, fullscreen=True)
     game.run()
 
 if __name__ == "__main__":
