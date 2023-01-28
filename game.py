@@ -1,11 +1,14 @@
 import pygame
 import time
+import os
+import datetime
 from enum import Enum
 
 from gameLib import *
 from track import HandInput
 
 BACKGROUND_COLOR = (0, 0, 0)
+HIGHSCORE_PATH = 'hs.txt'
 
 class GameState(Enum):
     IN_MENU = 0
@@ -37,6 +40,9 @@ class Game:
         self.player = None
 
         self.menu = Menu(screen_size, self.font)
+
+        with open(HIGHSCORE_PATH, 'r') as f:
+            self._hs = int(f.read())
 
     def draw(self):
         self.screen.fill(BACKGROUND_COLOR)
@@ -90,9 +96,13 @@ class Game:
                         self.player.fire()
 
                 self.world.update()
-
             
             self.draw()
+        
+        self._hs = max(self._hs, self.world.score)
+
+        with open(HIGHSCORE_PATH, 'w') as f:
+            f.write(str(self._hs))
 
     def start_game(self):
         self.world = World(self.screen.get_size())
@@ -101,7 +111,7 @@ class Game:
         self.world.ally_group.add(self.player)
 
         self.state = GameState.PLAYING_GAME
-    
+
     def poll_process(self):
         process = None
         if self.input is not None:
