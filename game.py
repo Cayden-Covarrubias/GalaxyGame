@@ -82,6 +82,9 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.state = GameState.QUIT
+                
+                elif event.type == EVENT_GAMEOVER:
+                    self.state = GameState.IN_MENU
 
                 elif event.type in [pygame.KEYDOWN, pygame.KEYUP]:
                     self.handle_keypress(event.key, event.type)
