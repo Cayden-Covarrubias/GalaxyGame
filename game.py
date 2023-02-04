@@ -1,7 +1,4 @@
 import pygame
-import time
-import os
-import datetime
 from enum import Enum
 
 from gameLib import *
@@ -60,8 +57,20 @@ class Game:
         if self.state == GameState.IN_MENU:
             self.menu.group.draw(self.screen)
 
-            if self.poll_process():
-                self.start_game()
+            if self.input is not None:
+                user_input = self.input.process_position_input()
+                
+                over_start_button = 0
+
+                for pos in user_input:
+                    pos = (pos[0] * self.screen.get_width(), pos[1] * self.screen.get_height())
+                    pygame.draw.circle(self.screen, (255, 100, 0), pos, 6)
+
+                    if (self.menu.is_over_start_button(*pos)):
+                        over_start_button += 1
+                
+                if over_start_button == 2:
+                    self.start_game()
 
         pygame.display.flip()
 
@@ -125,7 +134,7 @@ class Game:
         return process
 
 def main():
-    game = Game((800, 600), camera_input=False, fullscreen=True)
+    game = Game((800, 600), camera_input=True, fullscreen=True)
     game.run()
 
 if __name__ == "__main__":

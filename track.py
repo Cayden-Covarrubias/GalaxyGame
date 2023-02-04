@@ -47,6 +47,33 @@ class HandInput:
         self.falling_edge = False
         self._fire = False
     
+    def _get_pointer_finger_screen(self, result, image_ratio):
+        landmark_positions = np.zeros((len(result.landmark), 3))
+
+        for i in range(landmark_positions.shape[0]):
+            landmark_positions[i,0] = 1 - result.landmark[i].x * image_ratio
+            landmark_positions[i,1] = result.landmark[i].y
+            landmark_positions[i,2] = result.landmark[i].z
+        
+        return landmark_positions[8]
+    
+    def process_position_input(self):
+        _, image = self._cap.read()
+        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        results = self._hand_processor.process(image_rgb).multi_hand_landmarks
+
+        image_ratio = image.shape[1] / image.shape[0]
+
+        ret = []
+
+        if results is None:
+            return ret
+
+        for result in results:
+            ret.append(self._get_pointer_finger_screen(result, image_ratio))
+        
+        return ret
+        
     def process_game_input(self):
         _, image = self._cap.read()
         image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)

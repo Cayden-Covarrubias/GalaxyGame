@@ -3,7 +3,7 @@ import pygame
 from gameLib import *
 
 ENEMY_MISSILE_SPEED = 0.5
-ENEMY_MISSILE_DAMAGE = 60
+ENEMY_MISSILE_DAMAGE = 40
 ENEMY_MISSILE_HEALTH = 1
 
 ENEMY_MISSILE_TEXTURE = pygame.image.load('textures/enemy_missile.png')
