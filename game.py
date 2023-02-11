@@ -6,6 +6,7 @@ from track import HandInput
 
 BACKGROUND_COLOR = (0, 0, 0)
 HIGHSCORE_PATH = 'hs.txt'
+TIMEOUT = 2000 # 5 minutes
 
 class GameState(Enum):
     IN_MENU = 0
@@ -37,9 +38,9 @@ class Game:
         self.player = None
 
         with open(HIGHSCORE_PATH, 'r') as f:
-            self._hs = int(f.read())
+            self._highscore = int(f.read())
 
-        self.menu = Menu(screen_size, self.font, self._hs)
+        self.menu = Menu(screen_size, self.font, self._highscore)
 
         self.background = Background(screen_size)
 
@@ -53,13 +54,12 @@ class Game:
             img = self.font.render(f"Score: {self.world.score}", True, (255, 255, 255))
 
             self.screen.blit(img, (0, 0))
-        
+
         if self.state == GameState.IN_MENU:
             self.menu.group.draw(self.screen)
 
             if self.input is not None:
-                user_input = self.input.process_position_input()
-                
+                user_input = self.input.process_position_input()                
                 over_start_button = 0
 
                 for pos in user_input:
@@ -93,6 +93,8 @@ class Game:
                     self.state = GameState.QUIT
                 
                 elif event.type == EVENT_GAMEOVER:
+                    self._highscore = max(self._highscore, self.world.score)
+                    self.menu.update_highscore(self._highscore)
                     self.state = GameState.IN_MENU
 
                 elif event.type in [pygame.KEYDOWN, pygame.KEYUP]:
@@ -102,28 +104,28 @@ class Game:
                 process = self.poll_process()
 
                 if process is not None:
+                    self.timeout_timer = pygame.timer.get_ticks() + TIMEOUT
                     fire, move = process
 
                     self.player.position = self.player.position.lerp(Vector((1 - move) * self.world.size[0], self.player.position.y), 0.6)
-
                     if (fire):
                         self.player.fire()
+                
+                elif pygame.time.get_ticks() > self.timeout_timer and self.input is not None:
+                    print(f'User timeout after {TIMEOUT} ms')
+                    self.player.kill()
 
                 self.world.update()
-            
             self.draw()
-        
-        self._hs = max(self._hs, self.world.score)
 
         with open(HIGHSCORE_PATH, 'w') as f:
-            f.write(str(self._hs))
+            f.write(str(self._highscore))
 
     def start_game(self):
+        self.timeout_timer = pygame.time.get_ticks() + TIMEOUT
         self.world = World(self.screen.get_size())
-
         self.player = Player(self.world, self.screen.get_size())
         self.world.ally_group.add(self.player)
-
         self.state = GameState.PLAYING_GAME
 
     def poll_process(self):
@@ -134,7 +136,7 @@ class Game:
         return process
 
 def main():
-    game = Game((800, 600), camera_input=True, fullscreen=True)
+    game = Game((800, 600), camera_input=False, fullscreen=False)
     game.run()
 
 if __name__ == "__main__":

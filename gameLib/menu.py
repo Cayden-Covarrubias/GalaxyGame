@@ -5,6 +5,8 @@ TITLE_TEXTURE = pygame.image.load('textures/Handaga.png')
 class Menu:
     def __init__(self, screen_size, font, highscore):
         self.group = pygame.sprite.Group()
+        self.font = font
+        self.screen_size = screen_size
         
         title = pygame.sprite.Sprite(self.group)
         title.image = TITLE_TEXTURE
@@ -23,11 +25,11 @@ class Menu:
         info.rect.y = screen_y - info.rect.height - 30
 
         img = font.render(f"High Score: {highscore}", False, (255, 255, 255))
-        hs = pygame.sprite.Sprite(self.group)
-        hs.image = img
-        hs.rect = img.get_rect()
-        hs.rect.x = screen_x / 2 - hs.rect.width / 2
-        hs.rect.y = screen_y / 2 - hs.rect.height / 2 + 100
+        self.highscore_text = pygame.sprite.Sprite(self.group)
+        self.highscore_text.image = img
+        self.highscore_text.rect = img.get_rect()
+        self.highscore_text.rect.x = screen_x / 2 - self.highscore_text.rect.width / 2
+        self.highscore_text.rect.y = screen_y / 2 - self.highscore_text.rect.height / 2 + 100
 
         img = pygame.Surface((300, 70))
         img.fill((50, 50, 50))
@@ -47,3 +49,12 @@ class Menu:
     def is_over_start_button(self, x, y):
         return self.start_button.rect.x <= x and x <= self.start_button.rect.x + self.start_button.rect.width and \
             self.start_button.rect.y <= y and y <= self.start_button.rect.y + self.start_button.rect.height
+    
+    def update_highscore(self, highscore):
+        print(highscore)
+        screen_x, screen_y = self.screen_size
+        img = self.font.render(f"High Score: {highscore}", False, (255, 255, 255))
+        self.highscore_text.image = img
+        self.highscore_text.rect = img.get_rect()
+        self.highscore_text.rect.x = screen_x / 2 - self.highscore_text.rect.width / 2
+        self.highscore_text.rect.y = screen_y / 2 - self.highscore_text.rect.height / 2 + 100
