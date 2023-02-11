@@ -16,6 +16,8 @@ class Player(Entity):
 
         self._min_x = DEFAULT_SIZE / 2 + PLAYER_PADDING
         self._max_x = screen_size[0] - DEFAULT_SIZE / 2 - PLAYER_PADDING
+
+        world.player = self
     
     def fire(self):
         missile = PlayerMissile(self.world, self.position)

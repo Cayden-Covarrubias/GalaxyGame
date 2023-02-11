@@ -11,6 +11,7 @@ class World:
         self.size = size
         self.enemy_group = Formation(self, 3)
         self.score = 0
+        self.player = None
     
     def draw(self, surface):
         self.ally_group.draw(surface)
