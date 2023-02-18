@@ -3,6 +3,7 @@ from enum import Enum
 
 from gameLib import *
 from track import HandInput
+import Arduino_Interface
 
 BACKGROUND_COLOR = (0, 0, 0)
 HIGHSCORE_PATH = 'hs.txt'
@@ -102,7 +103,7 @@ class Game:
 
             if self.state == GameState.PLAYING_GAME:
                 process = self.poll_process()
-
+                Arduino_Interface.writescore(self.world)
                 if process is not None:
                     self.timeout_timer = pygame.time.get_ticks() + TIMEOUT
                     fire, move = process
@@ -136,7 +137,7 @@ class Game:
         return process
 
 def main():
-    game = Game((800, 600), camera_input=False, fullscreen=True)
+    game = Game((800, 600), camera_input=False, fullscreen=False)
     game.run()
 
 if __name__ == "__main__":
