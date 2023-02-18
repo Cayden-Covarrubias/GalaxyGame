@@ -104,7 +104,7 @@ class Game:
                 process = self.poll_process()
 
                 if process is not None:
-                    self.timeout_timer = pygame.timer.get_ticks() + TIMEOUT
+                    self.timeout_timer = pygame.time.get_ticks() + TIMEOUT
                     fire, move = process
 
                     self.player.position = self.player.position.lerp(Vector((1 - move) * self.world.size[0], self.player.position.y), 0.6)
@@ -136,7 +136,7 @@ class Game:
         return process
 
 def main():
-    game = Game((800, 600), camera_input=False, fullscreen=False)
+    game = Game((800, 600), camera_input=False, fullscreen=True)
     game.run()
 
 if __name__ == "__main__":

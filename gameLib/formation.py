@@ -77,15 +77,15 @@ class Formation(pygame.sprite.Group):
                 if (len(self._main_ships) > 0):
                     ship = random.choice(self._main_ships)
 
-                self._main_ships.remove(ship)
-                self._attack_ships.append(ship)
+                    self._main_ships.remove(ship)
+                    self._attack_ships.append(ship)
 
-                target = Vector(
-                    self._world.player.position.x,
-                    random.randint(self._world.size[1] - ATTACK_Y_MAX, self._world.size[1] - ATTACK_Y_MIN)
-                )
+                    target = Vector(
+                        self._world.player.position.x,
+                        random.randint(self._world.size[1] - ATTACK_Y_MAX, self._world.size[1] - ATTACK_Y_MIN)
+                    )
 
-                self._target_pos_dict[ship] = (Vector(ship.position.x, ship.position.y), target)
+                    self._target_pos_dict[ship] = (Vector(ship.position.x, ship.position.y), target)
 
             enemies_left = False
             temp_array = []
@@ -104,11 +104,15 @@ class Formation(pygame.sprite.Group):
             temp_array = []
             for i in range(len(self._attack_ships)):
                 ship = self._attack_ships[i]
+                distance_to_target = self._target_pos_dict[ship][1].distance(ship.position)
 
-                if (fire and self._target_pos_dict[ship][1].distance(ship.position) < 5):
+                if (fire and distance_to_target < 5):
                     ship.fire()
 
-                if (self._target_pos_dict[ship][1].distance(ship.position) >= 5):
+                elif (distance_to_target >= 1000):
+                    ship.kill()
+
+                elif (distance_to_target >= 5):
                     d = self._target_pos_dict[ship][1] - self._target_pos_dict[ship][0]
                     d = d * 0.001 * self._world.delta_time
                     ship.position.x = ship.position.x + d.x
