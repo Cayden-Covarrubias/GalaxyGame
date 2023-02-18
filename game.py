@@ -6,7 +6,7 @@ from track import HandInput
 
 BACKGROUND_COLOR = (0, 0, 0)
 HIGHSCORE_PATH = 'hs.txt'
-TIMEOUT = 2000 # 5 minutes
+TIMEOUT = 1000 * 5 * 60 # 5 seconds
 
 class GameState(Enum):
     IN_MENU = 0
