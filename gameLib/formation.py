@@ -106,13 +106,13 @@ class Formation(pygame.sprite.Group):
                 ship = self._attack_ships[i]
                 distance_to_target = self._target_pos_dict[ship][1].distance(ship.position)
 
-                if (fire and distance_to_target < 5):
+                if (fire and distance_to_target < 20):
                     ship.fire()
 
                 elif (distance_to_target >= 1000):
                     ship.kill()
 
-                elif (distance_to_target >= 5):
+                elif (distance_to_target >= 20):
                     d = self._target_pos_dict[ship][1] - self._target_pos_dict[ship][0]
                     d = d * 0.001 * self._world.delta_time
                     ship.position.x = ship.position.x + d.x
